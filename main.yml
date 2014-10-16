@@ -1,6 +1,6 @@
 ---
-- hosts: self
-  user: jgeerling
+- hosts: localhost
+  user: devops
   connection: local
 
   vars_files:
@@ -15,7 +15,7 @@
         path: "{{ downloads }}"
         state: directory
 
-    - include: tasks/dotfiles.yml
+    # - include: tasks/dotfiles.yml
     - include: tasks/preferences.yml
 
     - name: Get list of apps installed with cask.
