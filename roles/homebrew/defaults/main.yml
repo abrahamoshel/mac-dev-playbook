@@ -1,0 +1,12 @@
+---
+homebrew_packages_taps:
+  - homebrew/binary
+  - homebrew/dupes
+
+homebrew_packages_packages:
+  - { name: docker }
+  - { name: git }
+  - { name: imagemagick }
+  - { name: mysql }
+  - { name: phantomjs }
+  - { name: redis }

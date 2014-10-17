@@ -1,0 +1,13 @@
+---
+galaxy_info:
+  author: Abraham Oshel
+  description: Ansible role for installing homebrew packages
+  license: MIT
+  min_ansible_version: 1.7.1
+  platforms:
+    - name: OSX
+      versions:
+      - all
+  categories:
+    - packaging
+dependencies: []
