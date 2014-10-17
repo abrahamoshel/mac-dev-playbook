@@ -5,9 +5,8 @@ galaxy_info:
   license: MIT
   min_ansible_version: 1.7.1
   platforms:
-    - name: OSX
-      versions:
-      - all
+    name: OSX
+    versions: all
   categories:
     - packaging
 dependencies: []
