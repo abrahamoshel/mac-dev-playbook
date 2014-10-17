@@ -5,8 +5,3 @@ homebrew_packages_taps:
 
 homebrew_packages_packages:
   - { name: docker }
-  - { name: git }
-  - { name: imagemagick }
-  - { name: mysql }
-  - { name: phantomjs }
-  - { name: redis }

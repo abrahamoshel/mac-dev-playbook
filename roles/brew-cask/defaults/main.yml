@@ -2,7 +2,4 @@
 homebrew_cask_packages_packages:
   - firefox
   - google-chrome
-  - hipchat
-  - iterm2
-  - vagrant
-  - virtualbox
+
