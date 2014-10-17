@@ -1,0 +1,5 @@
+---
+# tasks file for git-projects
+
+- git: repo=ssh://git@github.com/{{item}}.git dest={{working_dir}}
+  with_items: git_repos
