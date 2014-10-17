@@ -1,5 +1,5 @@
 ---
 working_dir: /Users/abrahamoshel/Desktop
 git_repos:
-  - homestyle/redbull-n-beer
-  - homestyle/telegram
+  - {name: "homestyle", repo: "redbull-n-beer"}
+  - {name: "homestyle", repo: "telegram"}

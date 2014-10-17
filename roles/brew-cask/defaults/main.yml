@@ -1,5 +1,4 @@
 ---
 homebrew_cask_packages_packages:
-  - firefox
   - google-chrome
 
