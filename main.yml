@@ -9,6 +9,7 @@
   roles:
     - homebrew
     - brew-cask
+    - git-projects
 
   # tasks:
   #   - name: Ensure Ansible downloads directory exists.
