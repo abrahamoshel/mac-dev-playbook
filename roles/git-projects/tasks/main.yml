@@ -3,4 +3,3 @@
 
 - git: repo=https://github.com/{{item.name}}/{{item.repo}}.git dest={{working_dir}}/{{item.repo}}
   with_items: git_repos
-}
