@@ -1,0 +1,17 @@
+---
+- hosts: localhost
+  user: devops
+  connection: local
+
+  tasks:
+    - name: Check if nginx conf needs update
+      changed_when: False
+      shell: cat ~/Desktop/testing.txt
+      register: nginx_existest
+
+    - name: Change file
+      lineinfile: dest=~/Desktop/testing.txt
+        regexp=^\D+w.deals
+        line=www.deals
+        state=present
+      when: nginx_existest.stdout.find('www.deals') == -1
