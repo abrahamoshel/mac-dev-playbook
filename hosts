@@ -1,1 +1,2 @@
-localhost   ansible_connection=local
+[yosemite]
+localhost ansible_ssh_port=2222
