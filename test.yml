@@ -10,8 +10,7 @@
       register: nginx_existest
 
     - name: Change file
-      lineinfile: dest=~/Desktop/testing.txt
-        regexp=^\D+w.deals
-        line=www.deals
-        state=present
+      template: src=templates/test.j2 dest=~/Desktop/testing.txt
+      with_items:
+        - collection: [{total: www.deals }, {total: etproxy.deals }]
       when: nginx_existest.stdout.find('www.deals') == -1
