@@ -5,3 +5,16 @@ homebrew_packages_taps:
 
 homebrew_packages_packages:
   - { name: docker }
+  - { name: rbenv }
+  - { name: ruby-build }
+  - { name: rbenv-vars }
+  - { name: rbenv-gem-rehash }
+  - { name: rbenv-default-gems }
+  - { name: rbenv-communal-gems }
+  - { name: rbenv-bundler }
+  - { name: nginx }
+  - { name: dnsmasq }
+
+rbenv_plugins:
+  - { repo_url: "tpope/rbenv-sentience", target: "~/.rbenv/plugins/rbenv-sentience"}
+

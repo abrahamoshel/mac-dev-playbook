@@ -1,5 +1,5 @@
 ---
 # tasks file for git-projects
-
-- git: repo=https://github.com/{{item.name}}/{{item.repo}}.git dest={{working_dir}}/{{item.repo}}
+- name: Cloning Github Repos
+  git: repo=https://github.com/{{item.name}}/{{item.repo}}.git dest={{working_dir}}/{{item.repo}}
   with_items: git_repos

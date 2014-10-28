@@ -1,10 +1,19 @@
 ---
 # tasks file for homebrew-packages
-
-- homebrew_tap: tap={{ item }} state=present
+- name: Tapping Homebrew of extra packages
+  homebrew_tap: tap={{ item }} state=present
   with_items: homebrew_packages_taps
 
-- homebrew: update_homebrew=yes
+- name: Updating Homebrew if Needed
+  homebrew: update_homebrew=yes
 
-- homebrew: name={{ item.name }} state={{ item.state|default("latest") }} install_options={{ item.install_options|default() }}
+- name: Installing the lastest requested brews.
+  homebrew: name={{ item.name }} state={{ item.state|default("latest") }} install_options={{ item.install_options|default() }}
   with_items: homebrew_packages_packages
+
+- name: Create rbenv plugins directory
+  file: state=directory path=~/.rbenv/plugins
+
+- name: Install rbenv plugins
+  git: repo=https://github.com/{{item.repo_url}}.git dest={{item.target}}
+  with_items: rbenv_plugins
