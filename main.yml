@@ -1,7 +1,6 @@
 ---
-- hosts: localhost
+- hosts: yosemite
   user: devops
-  connection: local
 
   vars_files:
     - vars/main.yml
@@ -10,6 +9,16 @@
     - homebrew
     - brew-cask
     - git-projects
+
+  tasks:
+    - name: Create Asgard Folder
+      file: state=directory path=~/.asgard
+
+    - name: Create Asgard Creditial Files
+      copy: src=templates/credentials dest=~/.asgard/credentials force=no
+
+    - name: Create Boto File
+      copy: src=templates/boto dest=~/.boto force=no
 
   # tasks:
   #   - name: Ensure Ansible downloads directory exists.
