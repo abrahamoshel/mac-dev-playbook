@@ -1,0 +1,16 @@
+applications:
+  - collection: [
+      {top_level: "content", port: "3001"},
+      {top_level: "placement", port: "3002"},
+      {top_level: "users", port: "3003"},
+      {top_level: "discussions", port: "3005"},
+      {top_level: "bfapp", port: "3006"},
+      {top_level: "bfadmin", port: "3007"},
+      {top_level: "etproxy", port: "3008"},
+      {top_level: "redirector", port: "8080"},
+      {top_level: "engagement", port: "8081"},
+      {top_level: "imageredirect", port: "6300"},
+      {top_level: "blog", port: "8888/blog"},
+      {top_level: "blackfriday", port: "8888/blackfriday"},
+      {top_level: "cybermonday", port: "8888/cybermonday"}
+    ]

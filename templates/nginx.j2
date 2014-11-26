@@ -1,0 +1,75 @@
+worker_processes  1;
+
+events {
+    worker_connections  1024;
+}
+
+http {
+{% for app in item.collection %}
+  server {
+    listen 80;
+    server_name {{app.top_level}}.deals;
+    location / {
+      proxy_pass  http://127.0.0.1:{{app.port}}$request_uri;
+      proxy_set_header Host $host;
+      proxy_redirect off;
+    }
+  }
+{% endfor %}
+
+  ##############################
+  ##                          ##
+  ##   Special Cases          ##
+  ##############################
+  server {
+    listen 80;
+    server_name www.deals;
+    location / {
+      proxy_pass  http://127.0.0.1:3000$request_uri;
+      proxy_set_header Host $host;
+      proxy_redirect off;
+    }
+    # Short urls
+    location ^~ /p/ {
+        rewrite ^/p/(\d+) /deals/deal-p$1 break;
+        proxy_pass  http://127.0.0.1:3000$uri;
+    }
+    location ^~ /c/ {
+        rewrite ^/c/(\d+) /coupons/coupon-c$1 break;
+        proxy_pass  http://127.0.0.1:3000$uri;
+    }
+
+    # Redirect service
+    location ^~ /go/ {
+        proxy_pass  http://127.0.0.1:8080$request_uri;
+    }
+  }
+
+  server {
+    listen *:443;
+    ssl on;
+    server_name content.deals;
+    ## Must generate SSL certs and give location for them
+    ssl_certificate     /usr/local/etc/nginx/development.crt;
+    ssl_certificate_key /usr/local/etc/nginx/development.key;
+    location / {
+      proxy_pass  http://127.0.0.1:3001$request_uri;
+      proxy_set_header Host $host;
+      proxy_redirect off;
+    }
+  }
+
+  server {
+    listen 80;
+    server_name resize.deals;
+    proxy_intercept_errors  on;
+    ## if it can't find image serve default images.
+    error_page 500 502 503 504 404 = http://content.deals/assets/deal_placeholder.png;
+    location / {
+      proxy_pass  http://127.0.0.1:9191$request_uri;
+      proxy_set_header Host $host;
+      proxy_redirect off;
+    }
+
+  }
+}

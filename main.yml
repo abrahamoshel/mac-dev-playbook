@@ -4,6 +4,7 @@
 
   vars_files:
     - vars/main.yml
+    - vars/applications.yml
 
   roles:
     - homebrew
@@ -15,27 +16,32 @@
       file: state=directory path=~/.asgard
 
     - name: Create Asgard Creditial Files
-      copy: src=templates/credentials dest=~/.asgard/credentials force=no
+      copy: src=files/credentials dest=~/.asgard/credentials force=no
 
     - name: Create Boto File
-      copy: src=templates/boto dest=~/.boto force=no
+      copy: src=files/boto dest=~/.boto force=no
 
-  # tasks:
-  #   - name: Ensure Ansible downloads directory exists.
-  #     file:
-  #       path: "{{ downloads }}"
-  #       state: directory
+    - name: Check if nginx conf needs update
+      changed_when: False
+      shell: cat /usr/local/etc/nginx/nginx.conf
+      register: nginx_exists
 
-  #   # - include: tasks/dotfiles.yml
-  #   - include: tasks/preferences.yml
+    - name: Change file
+      template: src=templates/nginx.j2 dest=/usr/local/etc/nginx/nginx.conf
+      with_items: applications
+      when: nginx_exists.stdout.find('www.deals') == -1
 
-  #   - name: Get list of apps installed with cask.
-  #     command: brew cask list
-  #     register: homebrew_cask_list
-  #     changed_when: false
+    - name: Move nginx redirects into place
+      copy: src=files/nginx/redirects dest=/usr/local/etc/nginx/redirects.conf force=no
 
-  #   - name: Install apps via `brew cask`.
-  #     command: >
-  #       brew cask install {{ item }} --appdir={{ homebrew_cask_appdir }}
-  #     with_items: homebrew_cask_apps
-  #     when: "'{{ item }}' not in homebrew_cask_list.stdout"
+    - name: Create file if it isn't there
+      file: state=touch path=/usr/local/etc/dnsmasq.conf
+
+    - name: Check is DNSMasq needs to be create
+      changed_when: False
+      shell: cat /usr/local/etc/dnsmasq.conf
+      register: dnsmasq_exists
+
+    - name: Create DNSMasq file if needed
+      copy: src=files/dnsmasq dest=/usr/local/etc/dnsmasq.conf
+      when: dnsmasq_exists.stdout.find("/\.deals\/") == -1

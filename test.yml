@@ -1,16 +1,26 @@
 ---
-- hosts: localhost
+- hosts: yosemite
   user: devops
-  connection: local
 
-  tasks:
-    - name: Check if nginx conf needs update
-      changed_when: False
-      shell: cat ~/Desktop/testing.txt
-      register: nginx_existest
+  roles:
+    - git-projects
+# ---
+# - hosts: yosemite
+#   user: devops
 
-    - name: Change file
-      template: src=templates/test.j2 dest=~/Desktop/testing.txt
-      with_items:
-        - collection: [{total: www.deals }, {total: etproxy.deals }]
-      when: nginx_existest.stdout.find('www.deals') == -1
+#   vars_files:
+#     - vars/applications.yml
+
+#   tasks:
+#     - name: Create file if it isn't there
+#       file: state=touch path=~/Desktop/testing.txt
+
+#     - name: Check if nginx conf needs update
+#       changed_when: False
+#       shell: cat ~/Desktop/testing.txt
+#       register: nginx_existest
+
+#     - name: Change file
+#       template: src=templates/nginx.j2 dest=~/Desktop/testing.txt
+#       with_items: applications
+#       when: nginx_existest.stdout.find('www.deals') == -1

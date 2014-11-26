@@ -1,0 +1,4 @@
+# Add domains which you want to force to an IP address here.
+# The example below send any host in .deals to a local
+# web-server.
+address=/.deals/127.0.0.1
