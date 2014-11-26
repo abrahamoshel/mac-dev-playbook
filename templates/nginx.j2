@@ -5,30 +5,46 @@ events {
 }
 
 http {
-{% for app in item.collection %}
+  map $server_name $app_port {
+    www.deals 3000;
+    content.deals 3001;
+    placement.deals 3002;
+    users.deals 3003;
+    coreg.deals 3003;
+    discussions.deals 3005;
+    bfapp.deals 3006;
+    bfadmin.deals 3007;
+    etproxy.deals 3008;
+    imageredirect.deals 6300;
+    redirector.deals 8080;
+    engagement.deals 8081;
+    blog.deals 8888/blog;
+    blackfriday.deals 8888/blackfriday;
+    cybermonday.deals 8888/cybermonday;
+  }
   server {
     listen 80;
-    server_name {{app.top_level}}.deals;
+    server_name resize.deals;
+    proxy_intercept_errors  on;
+    ## if it can't find image serve default images.
+    error_page 500 502 503 504 404 = http://content.deals/assets/deal_placeholder.png;
     location / {
-      proxy_pass  http://127.0.0.1:{{app.port}}$request_uri;
+      proxy_pass  http://127.0.0.1:9191$request_uri;
       proxy_set_header Host $host;
       proxy_redirect off;
     }
-  }
-{% endfor %}
 
-  ##############################
-  ##                          ##
-  ##   Special Cases          ##
-  ##############################
+  }
   server {
     listen 80;
     server_name www.deals;
+
     location / {
-      proxy_pass  http://127.0.0.1:3000$request_uri;
+      proxy_pass  http://127.0.0.1:$app_port$request_uri;
       proxy_set_header Host $host;
       proxy_redirect off;
-    }
+      include /usr/local/etc/nginx/redirects.conf;
+
     # Short urls
     location ^~ /p/ {
         rewrite ^/p/(\d+) /deals/deal-p$1 break;
@@ -46,30 +62,25 @@ http {
   }
 
   server {
-    listen *:443;
-    ssl on;
-    server_name content.deals;
-    ## Must generate SSL certs and give location for them
-    ssl_certificate     /usr/local/etc/nginx/development.crt;
-    ssl_certificate_key /usr/local/etc/nginx/development.key;
+    listen 80;
+
     location / {
-      proxy_pass  http://127.0.0.1:3001$request_uri;
+      proxy_pass  http://127.0.0.1:$app_port$request_uri;
       proxy_set_header Host $host;
       proxy_redirect off;
     }
   }
 
   server {
-    listen 80;
-    server_name resize.deals;
-    proxy_intercept_errors  on;
-    ## if it can't find image serve default images.
-    error_page 500 502 503 504 404 = http://content.deals/assets/deal_placeholder.png;
+    listen 443;
+    ssl on;
+    ## Must generate SSL certs and give location for them
+    ssl_certificate     /usr/local/etc/nginx/development.crt;
+    ssl_certificate_key /usr/local/etc/nginx/development.key;
     location / {
-      proxy_pass  http://127.0.0.1:9191$request_uri;
+      proxy_pass  http://127.0.0.1:$app_port$request_uri;
       proxy_set_header Host $host;
       proxy_redirect off;
     }
-
   }
 }
