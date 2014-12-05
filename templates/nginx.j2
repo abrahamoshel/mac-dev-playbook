@@ -5,22 +5,23 @@ events {
 }
 
 http {
-  map $server_name $app_port {
+  map $host $app_port {
     www.deals 3000;
     content.deals 3001;
     placement.deals 3002;
     users.deals 3003;
     coreg.deals 3003;
+    engagement.deals 3004;
     discussions.deals 3005;
     bfapp.deals 3006;
     bfadmin.deals 3007;
     etproxy.deals 3008;
     imageredirect.deals 6300;
-    redirector.deals 8080;
-    engagement.deals 8081;
+    redirector.deals 6301;
     blog.deals 8888/blog;
     blackfriday.deals 8888/blackfriday;
     cybermonday.deals 8888/cybermonday;
+    resize.deals 9191;
   }
   server {
     listen 80;
@@ -48,16 +49,16 @@ http {
     # Short urls
     location ^~ /p/ {
         rewrite ^/p/(\d+) /deals/deal-p$1 break;
-        proxy_pass  http://127.0.0.1:3000$uri;
+        proxy_pass  http://127.0.0.1:$app_port$uri;
     }
     location ^~ /c/ {
         rewrite ^/c/(\d+) /coupons/coupon-c$1 break;
-        proxy_pass  http://127.0.0.1:3000$uri;
+        proxy_pass  http://127.0.0.1:$app_port$uri;
     }
 
     # Redirect service
     location ^~ /go/ {
-        proxy_pass  http://127.0.0.1:8080$request_uri;
+        proxy_pass  http://127.0.0.1:6301$request_uri;
     }
   }
 
