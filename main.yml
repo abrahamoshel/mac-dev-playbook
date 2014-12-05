@@ -4,7 +4,9 @@
 
   vars_files:
     - vars/main.yml
-    - vars/applications.yml
+    - vars/casks.yml
+    - vars/git-projects.yml
+    - vars/homebrew.yml
 
   roles:
     - homebrew
@@ -27,8 +29,7 @@
       register: nginx_exists
 
     - name: Change file
-      template: src=templates/nginx.j2 dest=/usr/local/etc/nginx/nginx.conf
-      with_items: applications
+      copy: src=files/nginx/nginx.conf dest=/usr/local/etc/nginx/nginx.conf
       when: nginx_exists.stdout.find('www.deals') == -1
 
     - name: Move nginx redirects into place
